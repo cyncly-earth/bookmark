@@ -1,4 +1,4 @@
 export interface Domain {
-  id: number;
   name: string;
+  members: string[];
 }

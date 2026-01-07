@@ -1,1 +1,38 @@
-<div>Matrix component placeholder</div>
+<h2>BHOOMI – Domain Pod Matrix</h2>
+
+<input
+  type="text"
+  placeholder="Search member..."
+  [(ngModel)]="searchText"
+/>
+
+<br><br>
+
+<button (click)="addMember()">Add Member</button>
+
+<br><br>
+
+<table border="1" cellpadding="8">
+  <tr>
+    <th>Domain</th>
+    <th *ngFor="let pod of pods">{{ pod }}</th>
+    <th>Action</th>
+  </tr>
+
+  <tr *ngFor="let domain of domains; let dIndex = index">
+    <td>
+      {{ domain.name }}
+      <br>
+      <button (click)="deleteDomain(dIndex)">Delete Domain</button>
+    </td>
+
+    <td *ngFor="let member of domain.members; let pIndex = index">
+      <span *ngIf="member.toLowerCase().includes(searchText.toLowerCase())">
+        {{ member }}
+        <button (click)="deleteMember(dIndex, pIndex)">❌</button>
+      </span>
+    </td>
+
+    <td></td>
+  </tr>
+</table>
