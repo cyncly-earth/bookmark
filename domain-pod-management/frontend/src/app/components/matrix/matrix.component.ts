@@ -9,12 +9,12 @@ export class MatrixComponent {
 
   searchText = '';
 
-  pods = ['Pod 1', 'Pod 2', 'Pod 3', 'Pod 4', 'Pod 5'];
+  readonly pods: string[] = ['Pod 1', 'Pod 2', 'Pod 3', 'Pod 4', 'Pod 5'];
 
   domains: Domain[] = [
     {
       name: 'Domain 1',
-      members: ['Atif', 'Adijith', 'Averine', 'Meghana', 'Ananthu']
+      members: ['Atif', 'Adijith', 'Averine', 'Meghana', 'Rithin']
     },
     {
       name: 'Domain 2',
@@ -22,29 +22,70 @@ export class MatrixComponent {
     }
   ];
 
-  addMember() {
-    const name = prompt('Enter member name');
-    const domain = prompt('Enter domain number (1 or 2)');
-    const pod = prompt('Enter pod number (1 to 5)');
+  /* ---------------- ADD MEMBER ---------------- */
 
-    if (!name || !domain || !pod) return;
+  addMember(): void {
+    const name = prompt('Enter member name')?.trim();
+    const domainNo = Number(prompt('Enter domain number'));
+    const podNo = Number(prompt('Enter pod number (1 to 5)'));
 
-    const dIndex = Number(domain) - 1;
-    const pIndex = Number(pod) - 1;
-
-    if (!this.domains[dIndex]) {
-      alert('Invalid domain');
+    if (!name) {
+      alert('Member name is required');
       return;
     }
 
-    this.domains[dIndex].members[pIndex] = name;
+    const domainIndex = domainNo - 1;
+    const podIndex = podNo - 1;
+
+    if (!this.isValidDomain(domainIndex) || !this.isValidPod(podIndex)) {
+      alert('Invalid domain or pod');
+      return;
+    }
+
+    if (this.domains[domainIndex].members[podIndex]) {
+      alert('Pod already occupied');
+      return;
+    }
+
+    if (this.isDuplicateMember(name)) {
+      alert('Member already exists');
+      return;
+    }
+
+    this.domains[domainIndex].members[podIndex] = name;
   }
 
-  deleteMember(domainIndex: number, podIndex: number) {
-    this.domains[domainIndex].members[podIndex] = '';
+  /* ---------------- DELETE MEMBER ---------------- */
+
+  deleteMember(domainIndex: number, podIndex: number): void {
+    if (this.isValidDomain(domainIndex) && this.isValidPod(podIndex)) {
+      this.domains[domainIndex].members[podIndex] = '';
+    }
   }
 
-  deleteDomain(index: number) {
-    this.domains.splice(index, 1);
+  /* ---------------- DELETE DOMAIN ---------------- */
+
+  deleteDomain(index: number): void {
+    if (confirm('Are you sure you want to delete this domain?')) {
+      this.domains.splice(index, 1);
+    }
+  }
+
+  /* ---------------- HELPER METHODS ---------------- */
+
+  private isValidDomain(index: number): boolean {
+    return index >= 0 && index < this.domains.length;
+  }
+
+  private isValidPod(index: number): boolean {
+    return index >= 0 && index < this.pods.length;
+  }
+
+  private isDuplicateMember(name: string): boolean {
+    return this.domains.some(domain =>
+      domain.members.some(member =>
+        member?.toLowerCase() === name.toLowerCase()
+      )
+    );
   }
 }
