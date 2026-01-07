@@ -1,5 +1,5 @@
 export interface Member {
-  id: number;
   name: string;
-  role?: string;
+  domainIndex: number;
+  podIndex: number;
 }

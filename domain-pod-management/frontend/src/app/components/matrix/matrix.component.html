@@ -1,1 +1,29 @@
-<div>Matrix component placeholder</div>
+<h2 class="title">🌍 BHOOMI – Domain Pod Matrix</h2>
+
+<div class="toolbar">
+  <input
+    type="text"
+    placeholder="🔍 Search member..."
+    [(ngModel)]="searchText"
+    class="search-box"
+  />
+
+  <button class="btn primary" (click)="addMember()">➕ Add Member</button>
+</div>
+
+<table class="matrix-table">
+  <thead>
+    <tr>
+      <th class="domain-col">Domain</th>
+      <th *ngFor="let pod of pods" class="pod-col">{{ pod }}</th>
+      <th class="action-col">Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let domain of domains; let dIndex = index">
+      <td class="domain-cell">
+        <strong>{{ domain.name }}</strong>
+      </td>
+
+      <td *ngFor="let member of domain.members; let pIndex = index">
